@@ -1,0 +1,53 @@
+from fomcrag.clean import Line, clean_document, normalize, page_of
+
+
+def L(text, page=1, block=0, x0=72.0, y=300.0, bold=False, size=11.0):
+    return Line(text, page, block, x0, y, y + 12, 792.0, bold, size)
+
+
+def clean(lines, n_pages=1):
+    return clean_document(lines, n_pages)[0]
+
+
+def test_running_headers_and_page_numbers_removed():
+    lines = []
+    for p in range(1, 9):
+        lines += [L(f"Page {p} of 8", p, y=20), L("January 27–28, 2015", p, y=40), L(f"Body text {p}.", p, block=1)]
+        if p % 2:  # alternating odd-page footer still counts as furniture
+            lines.append(L("Minutes of the Meeting of January 27–28, 2015", p, block=2, y=760))
+    text = clean(lines, 8)
+    assert "Page" not in text and "January" not in text and "Minutes" not in text
+    assert text == "\n\n".join(f"Body text {p}." for p in range(1, 9))
+
+
+def test_hyphenation_uses_document_vocabulary():
+    lines = [L("the longer-run goal. The Sys-"), L("tem expects longer-"), L("run rates to rise.")]
+    assert clean(lines) == "the longer-run goal. The System expects longer-run rates to rise."
+
+
+def test_speaker_turns_start_paragraphs():
+    lines = [L("CHAIR POWELL. Good afternoon."), L("MICHAEL MCKEE. Thanks. A question"), L("about rates."),
+             L("QUESTION. And inflation?"), L("MR. ZEISEL. That is true, yes.")]
+    assert clean(lines).split("\n\n") == [
+        "CHAIR POWELL. Good afternoon.", "MICHAEL MCKEE. Thanks. A question about rates.",
+        "QUESTION. And inflation?", "MR. ZEISEL. That is true, yes."]
+
+
+def test_sentence_continues_across_pages_and_offsets_map_to_pages():
+    lines = [L("The Committee decided to", 1), L("keep the target range unchanged.", 2), L("New paragraph.", 3)]
+    text, starts, _ = clean_document(lines, 3)
+    assert text == "The Committee decided to keep the target range unchanged.\n\nNew paragraph."
+    assert page_of(starts, 0) == 1
+    assert page_of(starts, text.index("keep")) == 2
+    assert page_of(starts, text.index("New")) == 3
+
+
+def test_bold_headings_and_footnotes_become_their_own_blocks():
+    lines = [L("Staff Review of the Economic Situation", bold=True, size=12), L("Activity rose", block=1),
+             L("1 Attended Tuesday’s session only.", block=1, size=8)]
+    assert clean(lines).split("\n\n") == [
+        "## Staff Review of the Economic Situation", "Activity rose", "1 Attended Tuesday’s session only."]
+
+
+def test_normalize():
+    assert normalize("0 to ¼  per­cent  ") == "0 to 1/4 percent"
