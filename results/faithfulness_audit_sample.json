@@ -1,0 +1,249 @@
+[
+ {
+  "qid": "q024",
+  "claim": "FOMC members agreed to maintain the target range for the federal funds rate at 1/2 to 3/4 percent at the February 2017 meeting [1][2].",
+  "cited": [
+   1,
+   2
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "Against this backdrop, they thought it appropriate to maintain the target range for the federal funds rate at 1/2 to 3/4 percent at this meeting.\n\nMost participants continued to judge that, while the outlook was subject to considerable uncertainty, a gradual pace of rate increases over time was likely to be appropriate to promote the Committee’s objectives of maximum employment and 2 percent inflation. Some participants viewed a gradual pace as likely to be warranted because inflation was still running below the Committee’s objective or because the proximity of the federal funds rate to the effective lower bound placed constraints on the ability of monetary policy to respond to adverse shocks to the aggregate demand for goods and services. In addition, it was noted that the downward pressure on longer-term interest rates exerted by the Federal Reserve’s asset holdings was expected to diminish in the years ahead in light of an anticipated gradual reduction in the size and duration of the Federal Reserve’s balance sheet.\n\n“Effective February 2, 2017, the Federal Open Market Committee directs the Desk to undertake open market operations as necessary to maintain the federal funds rate in a target range of 1/2 to 3/4 percent, including overnight reverse repurchase operations (and reverse repurchase operations with maturities of more than one day when necessary to accommodate weekend, holiday, or similar trading conventions) at an offering rate of 0.50 percent, in amounts limited only by the value of Treasury securities held outright in the System Open Market Account that are available for such operations and by a per-counterparty limit of $30 billion per day.\n\nThe Committee directs the Desk to continue rolling over maturing Treasury securities at auction and to continue reinvesting principal payments on all agency debt and agency mortgage-backed securities in agency mortgage-backed securities. The Committee also directs the Desk to engage in dollar roll and coupon swap transactions as necessary to facilitate settlement of the Federal Reserve’s agency mortgage-backed securities transactions.”\n\nThe vote also encompassed approval of the statement below to be released at 2:00 p.m.:"
+ },
+ {
+  "qid": "q109",
+  "claim": "Participants concluded that the forward guidance and balance sheet policies followed by the Federal Reserve after the financial crisis had been effective in providing stimulus at the effective lower bound (ELB), and that those tools had become an important part of the Committee’s current toolkit.",
+  "cited": [],
+  "verdict": "UNCITED"
+ },
+ {
+  "qid": "q109",
+  "claim": "Participants generally agreed that the balance sheet policies had eased financial conditions and contributed to the economic recovery.",
+  "cited": [],
+  "verdict": "UNCITED"
+ },
+ {
+  "qid": "q109",
+  "claim": "Brian Cheung with Yahoo Finance asked about the balance sheet's composition [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "BRIAN CHEUNG. Hi. Brian Cheung with Yahoo Finance. Another type of balance sheet question, but not necessarily focused on the repo crunch—there was a discussion before that, that maybe we should move—or, rather, the Fed should move to a more neutral balance sheet, trying to remove some of the agency mortgage-backed securities that are on the balance sheet and maybe replace them with shorter-term Treasuries. Not any—I haven’t really heard an update on the composure or the composition of the balance sheet for right now. I’m just wondering if the Fed is actively thinking about that right now, and, if so, when we might expect to hear something on that.\n\nCHAIR POWELL. You know, it’s a—it’s an issue, but it’s not an issue that we’re currently working on and—or reaching a decision on or anything like that. The question of the longer-run maturity composition of the balance sheet is a—is a big one, and it’s one we’ll return to over time, but not—not imminently."
+ },
+ {
+  "qid": "q025",
+  "claim": "Several foreign central banks loosened policy in response to the prospective drag on domestic growth from U.S. tariffs, as well as heightened uncertainty about global trade policies [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "By contrast, real private domestic final purchases (PDFP)—which comprises PCE and private fixed investment and which often provides a better signal than GDP of underlying economic momentum—posted a solid gain in the first quarter that was similar to its average rate of increase over 2024.\n\nIndicators of foreign economic activity pointed to a moderate pace of expansion in the first quarter, likely supported in part by front-loaded demand from U.S. importers in anticipation of tariff hikes.\n\nHowever, more recent indicators suggested weakening momentum, notably in Canada and Mexico, amid elevated uncertainty about global trade policies. Inflation abroad was near central bank targets in most foreign economies, in part reflecting lower energy prices. By contrast, Chinese inflation remained quite subdued.\n\nThe European Central Bank, the Bank of Mexico, and several central banks in emerging Asia eased monetary policy, citing in part the prospective drag on domestic growth from U.S. tariffs. In their communications, foreign central banks also emphasized the need to maintain policy flexibility amid heightened uncertainty."
+ },
+ {
+  "qid": "q025",
+  "claim": "They cited the potential negative impact of U.S. tariffs on their economies, which led them to ease monetary policy [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "By contrast, real private domestic final purchases (PDFP)—which comprises PCE and private fixed investment and which often provides a better signal than GDP of underlying economic momentum—posted a solid gain in the first quarter that was similar to its average rate of increase over 2024.\n\nIndicators of foreign economic activity pointed to a moderate pace of expansion in the first quarter, likely supported in part by front-loaded demand from U.S. importers in anticipation of tariff hikes.\n\nHowever, more recent indicators suggested weakening momentum, notably in Canada and Mexico, amid elevated uncertainty about global trade policies. Inflation abroad was near central bank targets in most foreign economies, in part reflecting lower energy prices. By contrast, Chinese inflation remained quite subdued.\n\nThe European Central Bank, the Bank of Mexico, and several central banks in emerging Asia eased monetary policy, citing in part the prospective drag on domestic growth from U.S. tariffs. In their communications, foreign central banks also emphasized the need to maintain policy flexibility amid heightened uncertainty."
+ },
+ {
+  "qid": "q025",
+  "claim": "Foreign central banks also emphasized the need to maintain policy flexibility amid this uncertainty [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "By contrast, real private domestic final purchases (PDFP)—which comprises PCE and private fixed investment and which often provides a better signal than GDP of underlying economic momentum—posted a solid gain in the first quarter that was similar to its average rate of increase over 2024.\n\nIndicators of foreign economic activity pointed to a moderate pace of expansion in the first quarter, likely supported in part by front-loaded demand from U.S. importers in anticipation of tariff hikes.\n\nHowever, more recent indicators suggested weakening momentum, notably in Canada and Mexico, amid elevated uncertainty about global trade policies. Inflation abroad was near central bank targets in most foreign economies, in part reflecting lower energy prices. By contrast, Chinese inflation remained quite subdued.\n\nThe European Central Bank, the Bank of Mexico, and several central banks in emerging Asia eased monetary policy, citing in part the prospective drag on domestic growth from U.S. tariffs. In their communications, foreign central banks also emphasized the need to maintain policy flexibility amid heightened uncertainty."
+ },
+ {
+  "qid": "q009",
+  "claim": "Chinese manufacturing output was curtailed by the rationing of electricity amid a coal shortage resulting in part from policies to lower carbon emissions [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "Moreover, Chinese manufacturing output was curtailed by the rationing of electricity amid a coal shortage resulting in part from policies to lower carbon emissions. In contrast to EMEs, advanced foreign economies (AFEs) generally continued to recover at a solid pace in the third quarter, as the boost from the further reopening of high-contact services activity was only partially offset by the drag from bottlenecks, the spread of the virus, and, in some places, labor shortages. Twelve-month rates of inflation abroad continued to rise, reflecting further increases in energy prices, persistent pressures from supply bottlenecks, and past exchange rate depreciation in some EMEs."
+ },
+ {
+  "qid": "q110",
+  "claim": "Participants cited declining excess savings, softening labor market conditions, and increased price sensitivity as signs of slowing consumption [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "Participants cited other factors that were likely leading to, or appeared consistent with, a slowdown in consumption, including the declining stock of excess savings, softening labor market conditions, and increased price sensitivity on the part of customers. Some participants observed that recent increases in home prices suggested that the housing sector’s response to monetary policy restraint may have peaked.\n\nIn their discussion of the business sector, participants cited various improvements in firms’ cost structures. These included better-functioning supply chains, lower input costs, and an increased ability to hire and retain workers. Participants also discussed conditions that could lead to higher economic activity—such as leaner inventories and reduced expectations of a sharp economic slowdown—and factors that could lead to lower economic activity—such as continuing economic uncertainty, the vulnerabilities of the CRE market, and the ongoing weakness of manufacturing output. Participants judged that, over coming quarters, firms would reduce the pace of their investment spending and hiring in response to tight financial conditions and the slowing of economic activity.\n\nParticipants remarked that the labor market continued to be very tight but pointed to signs that demand and supply were coming into better balance."
+ },
+ {
+  "qid": "q110",
+  "claim": "Rising auto sales and inventories alongside slowing vehicle inflation indicated a role for both supply and demand factors, with supply normalization and demand constraints due to higher borrowing costs contributing to the trend [3].",
+  "cited": [
+   3
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "So to go, break it down a little further: Of course, headline inflation has come down sharply from elevated levels as energy and food prices have come down, mostly due to [a] reversal of the effects [on those prices that resulted] from the war in Ukraine. And that’s, that’s a good thing, and the public experiences that, as I mentioned earlier.\n\nFor core inflation, I’d say there also—there has been a role for, for most—for, for both factors, both that I mentioned. Clearly, for goods, normalization of supply conditions is playing an important role, as is the reversal, the beginning of the reversal, of spending—back into services and away from goods.\n\nAnd take autos as an example. The combination of an increase in sales and inventories, while, while vehicle inflation has decelerated, points to a substantial role for supply, but there’s also a role for demand, as, you know, the loans and things like that are more expensive. So they’re both working there."
+ },
+ {
+  "qid": "q102",
+  "claim": "A participant said that previous episodes of elevated financial imbalances preceded the last two recessions that followed low unemployment levels [2].",
+  "cited": [
+   2
+  ],
+  "verdict": "UNSUPPORTED",
+  "passages": "The May reading of the Michigan measure of longer-term inflation expectations remained near its all-time low, and, although market-based measures of inflation compensation have improved from their lows in the middle of last year, they’re still below the average level in the period from 2010 to 2014.\n\nOf course, a breakout in inflation was also not a primary concern following the past two times the unemployment rate dropped as low as it is now when recessions followed within two or three years. Instead, both episodes were preceded by elevated financial imbalances.\n\nToday financial conditions appear to be more balanced. In most markets, house prices seem fairly well aligned with rents. While equity market valuations, as we heard earlier, appear somewhat elevated, earnings growth has been robust even as tax cut expectations have receded.\n\nRelative to fundamentals, equity market valuations don’t seem to be near the dizzying heights of 1999 and 2000. Leverage and maturity transformation are much lower than pre-crisis, and the large banks at the center of the system are much better capitalized and appear to be managing their risk exposures and liquidity much more carefully than before the crisis, in large part due to critical financial reforms and changes in risk appetite."
+ },
+ {
+  "qid": "q122",
+  "claim": "In November 2011, the FOMC described labor market conditions as weak, with unemployment remaining significantly above longer-run levels [4].",
+  "cited": [
+   4
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "Members noted that information received over the intermeeting period pointed to somewhat stronger economic growth in the third quarter, partly reflecting a reversal of temporary factors that had depressed economic growth in the first half of the year. However, overall labor market conditions remained weak. Members generally anticipated that unemployment would decline only gradually from levels significantly above those that the Committee would expect to prevail in the longer run, with inflation likely to settle at levels at or below those consistent with the Committee’s dual mandate. Accordingly, in the discussion of monetary policy for the period ahead, all Committee members agreed to continue the program of extending the average maturity of the Federal Reserve’s holdings of securities as announced in September. The Committee decided to maintain its existing policy of reinvesting principal payments from its holdings of agency debt and agency MBS in agency MBS and of rolling over maturing Treasury securities at auction. In addition, the Committee agreed to keep the target range for the federal funds rate at 0 to 1/4 percent and to reiterate its expectation that economic conditions—including low rates of resource utilization and a subdued outlook for inflation over the medium run—are likely to warrant exceptionally low levels for the federal funds rate at least through mid-2013."
+ },
+ {
+  "qid": "q122",
+  "claim": "Bernanke believed monetary policy could still reduce unemployment because a substantial portion of the unemployment was cyclical, arising from inadequate demand, and thus responsive to monetary policy through lower interest rates and more accommodative financial conditions [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "Given how hard it has been to bring down unemployment in the past, why are you confident you have the tools to bring it down in the future?\n\nCHAIRMAN BERNANKE. Well, we have the ability to provide more stimulus and accommodation. We believe that a good bit of the unemployment that we are seeing is what economists would call cyclical unemployment—that is, unemployment arising because of inadequate demand in the economy. If that’s the case, then a monetary policy—by lowering interest rates, making financial conditions more accommodative—should stimulate demand, should stimulate spending, and over a period of time, that will help bring down cyclical unemployment. That is something that we know from a lot of experience, and, although it’s been a very slow process here, there’s no reason to think that the same basic effect will not work in this case as well.\n\nNow, it’s also possible that part of the increase in unemployment reflects so-called structural factors—mismatches between worker skills and job opportunities, loss of skills, geographical mismatch, et cetera."
+ },
+ {
+  "qid": "q122",
+  "claim": "He emphasized that monetary policy could stimulate demand and spending, helping to reduce cyclical unemployment over time [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "Given how hard it has been to bring down unemployment in the past, why are you confident you have the tools to bring it down in the future?\n\nCHAIRMAN BERNANKE. Well, we have the ability to provide more stimulus and accommodation. We believe that a good bit of the unemployment that we are seeing is what economists would call cyclical unemployment—that is, unemployment arising because of inadequate demand in the economy. If that’s the case, then a monetary policy—by lowering interest rates, making financial conditions more accommodative—should stimulate demand, should stimulate spending, and over a period of time, that will help bring down cyclical unemployment. That is something that we know from a lot of experience, and, although it’s been a very slow process here, there’s no reason to think that the same basic effect will not work in this case as well.\n\nNow, it’s also possible that part of the increase in unemployment reflects so-called structural factors—mismatches between worker skills and job opportunities, loss of skills, geographical mismatch, et cetera."
+ },
+ {
+  "qid": "q004",
+  "claim": "The domestic policy directive adopted in March 2015 specified that the federal funds rate should be in a range from 0 to 1/4 percent [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "UNSUPPORTED",
+  "passages": "The Committee agreed to reiterate its expectation that, even after employment and inflation are near mandate-consistent levels, economic conditions may, for some time, warrant keeping the target federal funds rate below levels the Committee views as normal in the longer run.\n\nAt the conclusion of the discussion, the Committee voted to authorize and direct the Federal Reserve Bank of New York, until it was instructed otherwise, to execute transactions in the SOMA in accordance with the following domestic policy directive:\n\n“Consistent with its statutory mandate, the Federal Open Market Committee seeks monetary and financial conditions that will foster maximum employment and price stability. In particular, the Committee seeks conditions in reserve markets consistent with federal funds trading in a range from 0 to 1/4 percent. The Committee directs the Desk to undertake open market operations as necessary to maintain such conditions. The Committee directs the Desk to maintain its policy of rolling over maturing Treasury securities into new issues and its policy of reinvesting principal payments on all agency debt and agency mortgage-backed securities in agency mortgage-backed securities. The Committee also directs the Desk to engage in dollar roll and coupon swap transactions as necessary to facilitate settlement of the Federal Reserve’s agency mortgage-backed securities transactions."
+ },
+ {
+  "qid": "q011",
+  "claim": "Germany's rapid expansion more than offset weaker outcomes in other euro-area economies in the second quarter of 2010 [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "Imports of consumer goods fell substantially in July, while imports of industrial supplies, capital goods, and automotive products also moved down. In contrast, imports of petroleum products remained about flat in July.\n\nIncreases in foreign economic activity were robust, on average, in the second quarter. In particular, gross domestic product (GDP) grew strongly in the emerging market economies, even though gains in China apparently moderated. Among the advanced foreign economies, Europe posted a notable rise in economic activity in the second quarter; rapid expansion in Germany more than offset weaker outcomes in other euro-area economies, particularly those experiencing financial stress related to concerns about their fiscal situations and potential vulnerabilities in their banking sectors. In Canada and Japan, the rise in real GDP slowed noticeably in the second quarter. Recent indicators of foreign economic activity for the third quarter, including data on exports, production, and purchasing managers indexes, generally pointed to a slowing in the pace of expansion in economic activity abroad. Headline inflation rates in foreign economies generally were restrained in the second quarter by a deceleration in food and energy prices, but prices appeared to be rising a bit more rapidly of late."
+ },
+ {
+  "qid": "q042",
+  "claim": "The Fed did not state that global developments would directly affect inflation in September 2015; instead, Chair Yellen emphasized that the Fed’s primary objective was to achieve 2% inflation, not to set a ceiling on inflation, and that inflation was expected to return to 2% over time despite external factors [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "YLAN MUI. Hi, thanks. Ylan from the Washington Post. I want to kind of piggyback on Binya’s question a little bit and bring up the old thresholds of 6.5 percent unemployment and 2.5 percent inflation as the period during which the Fed promised to keep interest rates low.\n\nThat had sort of assumed—I guess sort of suggested that the Fed was comfortable with inflation rising above 2 percent. But you just said moments ago that you don’t want to wait until inflation actually hits your target before you are ready to lift off. So I wonder if you could explain that a little bit. Is there a shift in how much inflation the Fed is actually willing to accept?\n\nCHAIR YELLEN. So let me be clear—2 percent is our objective. We want to see inflation go back to 2 percent; 2 percent is not a ceiling on inflation. So we’re not trying to push the inflation rate above 2. It’s always our objective to get back to 2, but 2 percent is not a ceiling. And if it were a ceiling, you would have to be conducting a policy that, on average, would hold the inflation rate below 2 percent. That is not our policy."
+ },
+ {
+  "qid": "q042",
+  "claim": "Global developments, such as low inflation elsewhere, were acknowledged as part of the broader context but were not directly linked to inflation outcomes in the statement [2].",
+  "cited": [
+   2
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "ANN SAPHIR. Ann Saphir with Reuters. Just to piggyback on the global considerations—as you say, the U.S. economy has been growing. Are you worried that, given the global interconnectedness, the low inflation globally, all of the other concerns that you just spoke about, that you may never escape from this zero lower bound situation?\n\nCHAIR YELLEN."
+ },
+ {
+  "qid": "q042",
+  "claim": "The Fed's policy was focused on achieving its inflation target through monetary policy, not on global inflation trends directly influencing U.S. inflation [3].",
+  "cited": [
+   3
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "## Summary of Economic Projections\n\nIn conjunction with the Federal Open Market Committee (FOMC) meeting held on September 16–17, 2015, meeting participants submitted their projections of the most likely outcomes for real output growth, the unemployment rate, inflation, and the federal funds rate for each year from 2015 to 2018 and over the longer run. Each participant’s projection was based on information available at the time of the meeting together with his or her assessment of appropriate monetary policy and assumptions about the factors likely to affect economic outcomes. The longer-run projections represent each participant’s assessment of the value to which each variable would be expected to converge, over time, under appropriate monetary policy and in the absence of further shocks to the economy. “Appropriate monetary policy” is defined as the future path of policy that each participant deems most likely to foster outcomes for economic activity and inflation that best satisfy his or her individual interpretation of the Federal Reserve’s objectives of maximum employment and stable prices."
+ },
+ {
+  "qid": "q052",
+  "claim": "The forward guidance revised in March 2014 linked the length of near-zero rates to economic conditions by stating that the Committee would assess progress, both realized and expected, toward its objectives of maximum employment and 2 percent inflation in determining how long to maintain the current 0 to 1/4 percent target range [5].",
+  "cited": [
+   5
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "With respect to forward guidance about the federal funds rate, all members judged that, as the unemployment rate was likely to fall below 6-1/2 percent before long, it was appropriate to replace the existing quantitative thresholds at this meeting. Almost all members judged that the new language should be qualitative in nature and should indicate that, in determining how long to maintain the current 0 to 1/4 percent target range for the federal funds rate, the Committee would assess progress, both realized and expected, toward its objectives of maximum employment and 2 percent inflation. However, a couple of members preferred to include language in the statement indicating that the Committee would keep rates low if projected inflation remained persistently below the Committee’s 2 percent longer-run objective. One of these members argued that the Committee should continue to provide quantitative thresholds for both the unemployment rate and inflation.\n\nMembers also considered statement language that would provide information about the anticipated behavior of the federal funds rate once it is raised above its effective lower bound."
+ },
+ {
+  "qid": "q052",
+  "claim": "It emphasized that the decision to keep rates low would depend on progress toward these objectives, rather than on fixed thresholds [5].",
+  "cited": [
+   5
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "With respect to forward guidance about the federal funds rate, all members judged that, as the unemployment rate was likely to fall below 6-1/2 percent before long, it was appropriate to replace the existing quantitative thresholds at this meeting. Almost all members judged that the new language should be qualitative in nature and should indicate that, in determining how long to maintain the current 0 to 1/4 percent target range for the federal funds rate, the Committee would assess progress, both realized and expected, toward its objectives of maximum employment and 2 percent inflation. However, a couple of members preferred to include language in the statement indicating that the Committee would keep rates low if projected inflation remained persistently below the Committee’s 2 percent longer-run objective. One of these members argued that the Committee should continue to provide quantitative thresholds for both the unemployment rate and inflation.\n\nMembers also considered statement language that would provide information about the anticipated behavior of the federal funds rate once it is raised above its effective lower bound."
+ },
+ {
+  "qid": "q052",
+  "claim": "The Committee indicated it would not raise rates until economic conditions suggested that inflation and employment were on track to meet their mandates [5].",
+  "cited": [
+   5
+  ],
+  "verdict": "UNSUPPORTED",
+  "passages": "With respect to forward guidance about the federal funds rate, all members judged that, as the unemployment rate was likely to fall below 6-1/2 percent before long, it was appropriate to replace the existing quantitative thresholds at this meeting. Almost all members judged that the new language should be qualitative in nature and should indicate that, in determining how long to maintain the current 0 to 1/4 percent target range for the federal funds rate, the Committee would assess progress, both realized and expected, toward its objectives of maximum employment and 2 percent inflation. However, a couple of members preferred to include language in the statement indicating that the Committee would keep rates low if projected inflation remained persistently below the Committee’s 2 percent longer-run objective. One of these members argued that the Committee should continue to provide quantitative thresholds for both the unemployment rate and inflation.\n\nMembers also considered statement language that would provide information about the anticipated behavior of the federal funds rate once it is raised above its effective lower bound."
+ },
+ {
+  "qid": "q052",
+  "claim": "This qualitative guidance replaced previous quantitative thresholds, focusing instead on the Committee’s ongoing assessment of economic data [5].",
+  "cited": [
+   5
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "With respect to forward guidance about the federal funds rate, all members judged that, as the unemployment rate was likely to fall below 6-1/2 percent before long, it was appropriate to replace the existing quantitative thresholds at this meeting. Almost all members judged that the new language should be qualitative in nature and should indicate that, in determining how long to maintain the current 0 to 1/4 percent target range for the federal funds rate, the Committee would assess progress, both realized and expected, toward its objectives of maximum employment and 2 percent inflation. However, a couple of members preferred to include language in the statement indicating that the Committee would keep rates low if projected inflation remained persistently below the Committee’s 2 percent longer-run objective. One of these members argued that the Committee should continue to provide quantitative thresholds for both the unemployment rate and inflation.\n\nMembers also considered statement language that would provide information about the anticipated behavior of the federal funds rate once it is raised above its effective lower bound."
+ },
+ {
+  "qid": "q057",
+  "claim": "Powell said he wanted to turn the job over to whoever replaces him with the economy in really good shape, inflation under control coming back down to 2 percent, and a strong labor market [4].",
+  "cited": [
+   4
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "Does that imply a higher—does that imply a higher neutral rate and, therefore, the policy might be a little easier than it seems?\n\nCHAIR POWELL. All—you know, all things equal, yes. But all things aren’t equal.\n\nThere are many, many things pushing in different directions on where the neutral rate would be.\n\nBut, yes, that argument does come up.\n\nMICHELLE SMITH. Matt Egan.\n\nMATT EGAN. Thanks, Chair Powell. Matt Egan, with CNN. After today, you only have three more meetings at the helm of the Fed. Since becoming Fed Chair, you’ve seen multiple trade wars, the pandemic, COVID reopening, a period of high inflation. I know your term’s not up as Chair until May, but I’m wondering if you’ve given any thought to what you want your legacy to be.\n\nCHAIR POWELL. My legacy. I—my thought is that I really want to turn this job over to whoever replaces me in—with the economy in really good shape. That’s what I want to do. I want inflation to be under control, coming back down to 2 percent, and I want the labor market to be strong."
+ },
+ {
+  "qid": "q058",
+  "claim": "At the emergency press conference on March 3, 2020, Powell described the underlying state of the U.S. economy as strong, noting that the unemployment rate had been near half-century lows for over a year, job gains had been solid, and wages had been rising [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "## March 3, 2020\n\nCHAIR POWELL. Earlier today the Federal Open Market Committee announced a 1/2 percentage point reduction in the target range for the federal funds rate, bringing that range to 1 to 1-1/4 percent. My colleagues and I took this action to help the U.S. economy keep strong in the face of new risks to the economic outlook.\n\nThe fundamentals of the U.S. economy remain strong. The unemployment rate has been near half-century lows for well more than a year, the pace of job gains has been solid, and wages have been rising. These strong labor market conditions have underpinned solid household spending, which has been the key driver of economic growth over the past year. At the time of our FOMC meeting in January, prospects for continued economic growth remained favorable, and we judged that monetary policy was well positioned to support that outlook.\n\nSince then, the spread of the coronavirus has brought new challenges and risks. The virus has afflicted many communities around the world, and our thoughts and prayers go out to those who’ve been harmed. The outbreak has also disrupted economic activity in many countries and has prompted significant movements in financial markets."
+ },
+ {
+  "qid": "q058",
+  "claim": "He emphasized that strong labor market conditions had underpinned solid household spending, which had been the key driver of economic growth over the past year [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "## March 3, 2020\n\nCHAIR POWELL. Earlier today the Federal Open Market Committee announced a 1/2 percentage point reduction in the target range for the federal funds rate, bringing that range to 1 to 1-1/4 percent. My colleagues and I took this action to help the U.S. economy keep strong in the face of new risks to the economic outlook.\n\nThe fundamentals of the U.S. economy remain strong. The unemployment rate has been near half-century lows for well more than a year, the pace of job gains has been solid, and wages have been rising. These strong labor market conditions have underpinned solid household spending, which has been the key driver of economic growth over the past year. At the time of our FOMC meeting in January, prospects for continued economic growth remained favorable, and we judged that monetary policy was well positioned to support that outlook.\n\nSince then, the spread of the coronavirus has brought new challenges and risks. The virus has afflicted many communities around the world, and our thoughts and prayers go out to those who’ve been harmed. The outbreak has also disrupted economic activity in many countries and has prompted significant movements in financial markets."
+ },
+ {
+  "qid": "q058",
+  "claim": "Powell also stated that at the time of the January FOMC meeting, prospects for continued economic growth remained favorable, and monetary policy was well positioned to support that outlook [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "## March 3, 2020\n\nCHAIR POWELL. Earlier today the Federal Open Market Committee announced a 1/2 percentage point reduction in the target range for the federal funds rate, bringing that range to 1 to 1-1/4 percent. My colleagues and I took this action to help the U.S. economy keep strong in the face of new risks to the economic outlook.\n\nThe fundamentals of the U.S. economy remain strong. The unemployment rate has been near half-century lows for well more than a year, the pace of job gains has been solid, and wages have been rising. These strong labor market conditions have underpinned solid household spending, which has been the key driver of economic growth over the past year. At the time of our FOMC meeting in January, prospects for continued economic growth remained favorable, and we judged that monetary policy was well positioned to support that outlook.\n\nSince then, the spread of the coronavirus has brought new challenges and risks. The virus has afflicted many communities around the world, and our thoughts and prayers go out to those who’ve been harmed. The outbreak has also disrupted economic activity in many countries and has prompted significant movements in financial markets."
+ },
+ {
+  "qid": "q062",
+  "claim": "Chris Rugaber asked about Fed Governor Stephen Miran's continued role at the White House [1].",
+  "cited": [
+   1
+  ],
+  "verdict": "SUPPORTED",
+  "passages": "Our success in delivering on these goals matters to all Americans. We understand that our actions affect communities, families, and businesses across the country. Everything we do is in service to our public mission, and we at the Fed will do everything we can to achieve our maximum-employment and price-stability goals.\n\nThank you. I look forward to our discussion.\n\nCHRIS RUGABER. Great. Thank you. Chris Rugaber at Associated Press. As you know, Fed Governor Stephen Miran has continued—kept his position at the White House even as he’s joined the Fed Board. This is the first time, I believe, the Fed’s Board has had someone with executive-branch ties in decades. Does this compromise the Fed’s independence from day-to-day politics? And, relatedly, how can you maintain the public’s perception the Fed is politically independent with this dynamic?"
+ }
+]

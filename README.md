@@ -8,6 +8,8 @@
 
 Ask it *"To what level did the FOMC raise the target range in March 2023?"* and it answers from the March 2023 minutes, citing the exact PDF page. Ask it something the corpus cannot answer and it says so.
 
+![Answer with a page-linked citation, followed by the retrieved passages and their reranker scores](docs/screenshot.png)
+
 The system is the output, but the evaluation is the point. The results table below shows what each change did to retrieval quality, with confidence intervals, including the changes that looked good on the development split and then failed to replicate.
 
 ---
@@ -128,7 +130,7 @@ This is the part of the project I would defend first in a review.
 
 ## Experiments
 
-Every experiment is one config dict in [`configs/experiments.json`](configs/experiments.json). There is no code path per experiment. Per-query results, the config, the index hash and the git commit for every run are in [`results/runs/`](results/runs/). The complete dev table (18 runs) is [`results/dev.md`](results/dev.md), and the test table is [`results/test.md`](results/test.md).
+Every experiment is one config dict in [`configs/experiments.json`](configs/experiments.json). There is no code path per experiment. Per-query results, the config, the index hash and the git commit for every run are in [`results/runs/`](results/runs/). The complete dev table (19 runs) is [`results/dev.md`](results/dev.md), and the test table is [`results/test.md`](results/test.md).
 
 Dev split, all runs:
 
@@ -152,10 +154,11 @@ Dev split, all runs:
 | **E15** | **+ date and doc-type filter** | **0.856** | tie; MRR +0.013 | 0.647 | |
 | E16 | E14 + chunk header | 0.909 | | 0.665 | |
 | **E17** | **E15 + chunk header** | **0.909** | +0.053 (+0.00, +0.11) | **0.677** | |
+| E18 | E17 + HyDE query rewriting (6.2 s/query) | 0.902 | −0.008 vs E17 | 0.673 | |
 
 Selection rule, fixed in advance: at each step, keep the configuration with the best dev Recall@10, breaking ties on MRR. Bold rows are the chain.
 
-HyDE query rewriting is the last experiment. Its results are in [Answer generation](#answer-generation) because it needs the LLM.
+E18, HyDE query rewriting, needs the LLM. It is discussed under [Answer generation](#answer-generation).
 
 ## What I learned
 
@@ -204,7 +207,43 @@ I still serve the dev-selected configuration, because switching to the better te
 1. **Retrieval gate.** If the cross-encoder's best score is below a threshold, the LLM is never called. The threshold (0.509) was chosen on dev to maximize accuracy on answerable-vs-unanswerable. At that threshold it wrongly abstains on 0 of 66 answerable dev questions but catches only 3 of 10 unanswerable ones. False-premise questions ("Chair Powell at the March 2014 press conference") still retrieve confident passages from the right meeting.
 2. **The LLM itself**, which does most of the abstaining.
 
-{{ANSWER_RESULTS}}
+**Results.** Test split: 65 answerable and 10 unanswerable questions. The generator is Qwen3-4B-Instruct-2507, 4-bit, on the laptop GPU, and the same model serves as the judge.
+
+| Metric | LLM judge | Audited |
+|---|---:|---:|
+| Correct | 67.7% | 69.2% (45/65) |
+| Correct or partial | 78.5% | 83.1% (54/65) |
+| Wrong answers, excluding abstentions | | **6.2%** (4/65) |
+| Faithfulness: claims supported by their cited passages | 68.0% (all 122 claims) | 78.6% (22 of 28 sampled) |
+| Citation coverage: claims with at least one citation | 90.2% | |
+| Says "I don't know" on unanswerable questions | **9 / 10**\* | |
+| Says "I don't know" on answerable questions | 10.8% (7/65) | |
+| End-to-end latency, p50 | 3.3 s | |
+
+\*Scored 8/10 on the first pass. One reply ("Chairman Bernanke did not comment on the COVID-19 vaccine rollout… I don't know.") was mis-classified by an abstention detector that only checked the start of the reply. The detector was fixed and the saved outputs re-scored; nothing was regenerated.
+
+**Why there are two columns.** A 4B model judging its own answers is a weak judge, so a stronger model re-read every correctness verdict and a random sample of 28 faithfulness verdicts against the gold references and the cited passages. Agreement with the local judge was 81.5% on correctness and 81% on faithfulness, with errors in *both* directions:
+
+- It marked "Stephen Miran" wrong when the reference answer is "Stephen Miran".
+- It accepted an answer that described the September 2012 forward guidance when the question asked about January's.
+
+Every disagreement is listed in [`results/answer_audit.json`](results/answer_audit.json). The judge column is a cheap, reproducible signal for comparing runs. The audited column is the one to believe.
+
+**What the numbers say.**
+
+- **The system prefers declining to guessing.** Of the 11 answers audited as incorrect, 7 are "I don't know" and only 4 are wrong statements.
+- **The one unanswerable question it got wrong is the most instructive failure.** Asked about "the December 2008 press conference" (press conferences began in 2011), it retrieved the December 2008 *minutes* and attributed their content to Bernanke. The retriever answered a nearby question, and the generator did not check the premise.
+- **Unfaithful claims cluster where retrieval failed.** Three of the four unsupported claims in the audit sample come from one answer (q042), where the right passage was not retrieved and the model argued from irrelevant context.
+- **The 7 wrong abstentions have three distinct causes:**
+  - 2 were blocked by the retrieval gate, with a top score of 0.503 against a threshold of 0.509. The threshold is calibrated on only 10 unanswerable dev questions.
+  - 4 had their evidence at ranks 6–9, which counts for Recall@10 but is outside the LLM's top-5 context.
+  - 1 had the evidence at rank 1, and the model still declined.
+
+  The cheapest next fix is passing 8 chunks instead of 5.
+
+**HyDE query rewriting did not help (E18).** Having the LLM write a hypothetical answer passage and searching with it scored 0.902 dev Recall@10, against 0.909 without it, and raised retrieval latency from 0.15 s to 6.2 s. Once the date filter has picked the right meeting, there is little left for query rewriting to fix. It was not carried to test.
+
+**Claude as the generator.** Setting `ANTHROPIC_API_KEY` switches generation (and judging) to Claude through the same `chat()` function. The numbers above are the local model's only; the Claude path was not evaluated for this write-up.
 
 ## Failure cases I have not solved
 
@@ -214,7 +253,8 @@ From the final configuration's misses on dev and test:
 2. **Two-part questions.** Multi-passage recall is 0.81 on test, and every miss is the same failure: one of the two spans is found, the other is not. The top 10 fills with chunks from whichever document matches the dominant half of the question. *Next:* decompose the question into sub-queries and interleave their results.
 3. **Same meeting, wrong document.** "In December 2019, what did Powell blame for…" retrieves the December 2019 *meeting transcript*, where Powell also speaks, instead of the *press conference*. The doc-type filter only fires on explicit words like "press conference". *Next:* a learned doc-type classifier, or boosting instead of hard filtering.
 4. **Tables.** The Summary of Economic Projections tables survive PDF extraction as unordered number soup. The cleaner drops chart-axis paragraphs (1,468 of them) rather than indexing noise, so questions like "What was the median 2024 unemployment projection in June 2023?" are out of reach. *Next:* table-aware extraction.
-5. **Absolute recall is a lower bound.** Only the source passage of each question counts as relevant. A second passage that also answers the question is scored as a miss. Pooled relevance judgments over the top results of every configuration would fix that, at the cost of judging a few hundred more passages.
+5. **Heading-only chunks.** The semantic chunker breaks where adjacent sentences are least similar, and a heading is dissimilar to the sentence after it. Some chunks therefore contain only a heading (the screenshot above shows one at rank 3). *Next:* always attach a heading to the text that follows it.
+6. **Absolute recall is a lower bound.** Only the source passage of each question counts as relevant. A second passage that also answers the question is scored as a miss. Pooled relevance judgments over the top results of every configuration would fix that, at the cost of judging a few hundred more passages.
 
 ## Ingestion: making the PDFs usable
 

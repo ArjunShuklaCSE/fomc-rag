@@ -1,0 +1,34 @@
+{
+  "what": "Second-opinion audit of the local judge (Qwen3-4B) on the test split, by a stronger model reading every case against the gold reference and the cited passages.",
+  "correctness": {
+    "scope": "all 65 answerable test questions",
+    "agreement_with_judge": 0.815,
+    "disagreements": {
+      "q042": {"judge": "PARTIAL", "audit": "INCORRECT", "why": "answer denies what the reference states"},
+      "q043": {"judge": "CORRECT", "audit": "INCORRECT", "why": "describes the September 2012 guidance, not January's"},
+      "q052": {"judge": "CORRECT", "audit": "PARTIAL", "why": "misses the shortfall-length link"},
+      "q054": {"judge": "INCORRECT", "audit": "CORRECT", "why": "states both key facts"},
+      "q056": {"judge": "CORRECT", "audit": "PARTIAL", "why": "right number, wrongly denies Powell said it"},
+      "q058": {"judge": "INCORRECT", "audit": "CORRECT", "why": "matches the reference"},
+      "q062": {"judge": "INCORRECT", "audit": "CORRECT", "why": "names Stephen Miran, the reference answer"},
+      "q076": {"judge": "INCORRECT", "audit": "CORRECT", "why": "quotes the reference verbatim"},
+      "q092": {"judge": "INCORRECT", "audit": "CORRECT", "why": "matches the reference"},
+      "q100": {"judge": "PARTIAL", "audit": "CORRECT", "why": "contains the key fact"},
+      "q128": {"judge": "CORRECT", "audit": "PARTIAL", "why": "answers one half, says I don't know for the other"},
+      "q131": {"judge": "CORRECT", "audit": "PARTIAL", "why": "first half does not match the reference"}
+    },
+    "audited_counts": {"CORRECT": 45, "PARTIAL": 9, "INCORRECT": 11, "of_which_abstained": 7, "of_which_wrong_answer": 4}
+  },
+  "faithfulness": {
+    "scope": "28 claims from 14 randomly sampled answered test questions (results/faithfulness_audit_sample.json)",
+    "judge_agreement_on_cited_claims": "21/26",
+    "audited_supported": "22/28",
+    "judge_supported_same_sample": "23/28",
+    "note": "3 of the 4 unsupported claims come from q042, where retrieval missed the key passage"
+  },
+  "false_abstentions": {
+    "retrieval_gate_below_threshold": ["q008", "q093"],
+    "evidence_ranked_6_to_10_outside_llm_context": ["q048", "q064", "q082", "q115"],
+    "evidence_in_context_but_llm_declined": ["q017"]
+  }
+}

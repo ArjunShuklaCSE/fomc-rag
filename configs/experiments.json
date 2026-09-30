@@ -232,6 +232,25 @@
         ],
         "header": true
       }
+    },
+    {
+      "name": "E18",
+      "note": "E17 + HyDE: dense side searches with an LLM-written hypothetical answer passage",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        },
+        "method": "hybrid",
+        "w_dense": 0.3,
+        "rerank": 50,
+        "filters": [
+          "date",
+          "type"
+        ],
+        "header": true,
+        "rewrite": true
+      }
     }
   ],
   "selection": "Each step keeps the previous best on dev (primary metric Recall@10, ties -> MRR). Test is scored only for the final chain.",

@@ -17,3 +17,4 @@ dev,E14,semantic-250 hybrid w_dense=0.3 +rerank@50 +filter:date,0.7652,0.8561,0.
 dev,E15,semantic-250 hybrid w_dense=0.3 +rerank@50 +filter:date/type,0.7652,0.8561,0.6466,0.6824,0.7727,0.9318,927,160,176,45590,2d2a775f72,97cf401
 dev,E16,semantic-250 hybrid w_dense=0.3 +header +rerank@50 +filter:date,0.803,0.9091,0.6647,0.7063,0.8409,0.9621,928,153,177,45590,11b5107248,97cf401
 dev,E17,semantic-250 hybrid w_dense=0.3 +header +rerank@50 +filter:date/type,0.803,0.9091,0.6773,0.7147,0.8409,0.9621,928,149,172,45590,11b5107248,97cf401
+dev,E18,semantic-250 hybrid w_dense=0.3 +header +rerank@50 +filter:date/type +HyDE,0.7803,0.9015,0.6732,0.7084,0.8333,0.9545,931,6201,7279,45590,11b5107248,230b004

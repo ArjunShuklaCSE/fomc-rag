@@ -64,6 +64,15 @@ def sources(question: str, k: int = TOP_K) -> tuple[list[dict], dict]:
     return out, res
 
 
+def is_abstention(text: str, cited: list[int]) -> bool:
+    """'I don't know.' alone, or wrapped in an uncited sentence ("X did not comment on that. I don't know.").
+
+    A cited partial answer that ends with "I don't know" for one half of the question is an answer, not an abstention.
+    """
+    t = text.strip().lower()
+    return t.startswith("i don't know") or ("i don't know" in t and not cited)
+
+
 def answer(question: str) -> dict:
     t0 = time.perf_counter()
     srcs, res = sources(question)
@@ -75,7 +84,7 @@ def answer(question: str) -> dict:
                           f"{'-' + str(s['pages'][1]) if s['pages'][1] != s['pages'][0] else ''}\n{s['text']}" for s in srcs)
     text = chat(SYSTEM, f"Sources:\n\n{context}\n\nQuestion: {question}")
     cited = sorted({int(n) for n in CITE.findall(text) if 1 <= int(n) <= len(srcs)})
-    abstained = "llm" if text.strip().lower().startswith("i don't know") else None
+    abstained = "llm" if is_abstention(text, cited) else None
     return {"question": question, "answer": IDK if abstained else text, "abstained": abstained, "citations": cited,
             "sources": srcs, "top_score": top_score, "ms": (time.perf_counter() - t0) * 1000, "llm": backend_name()}
 

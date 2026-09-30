@@ -20,6 +20,7 @@
 | E15 | semantic-250 hybrid w_dense=0.3 +rerank@50 +filter:date/type | 0.765 | 0.856 (0.77–0.93) | +0.689 (+0.576, +0.795) | 0.647 | 0.682 | 927 | 160 | 176 |
 | E16 | semantic-250 hybrid w_dense=0.3 +header +rerank@50 +filter:date | 0.803 | 0.909 (0.84–0.96) | +0.742 (+0.636, +0.841) | 0.665 | 0.706 | 928 | 153 | 177 |
 | E17 | semantic-250 hybrid w_dense=0.3 +header +rerank@50 +filter:date/type | 0.803 | 0.909 (0.84–0.96) | +0.742 (+0.636, +0.841) | 0.677 | 0.715 | 928 | 149 | 172 |
+| E18 | semantic-250 hybrid w_dense=0.3 +header +rerank@50 +filter:date/type +HyDE | 0.780 | 0.902 (0.83–0.95) | +0.735 (+0.629, +0.833) | 0.673 | 0.708 | 931 | 6201 | 7279 |
 
 Recall@10 by question type:
 
@@ -43,3 +44,4 @@ Recall@10 by question type:
 | E15 | 1.000 | 0.731 | 0.840 | 0.333 |
 | E16 | 1.000 | 0.769 | 0.960 | 0.333 |
 | E17 | 1.000 | 0.769 | 0.960 | 0.333 |
+| E18 | 1.000 | 0.731 | 0.960 | 0.333 |
