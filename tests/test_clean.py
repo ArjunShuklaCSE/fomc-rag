@@ -49,5 +49,13 @@ def test_bold_headings_and_footnotes_become_their_own_blocks():
         "## Staff Review of the Economic Situation", "Activity rose", "1 Attended Tuesday’s session only."]
 
 
+def test_larger_font_is_a_heading_unless_mid_sentence():
+    body = [L("Body text that sets the dominant font size.", block=i, size=10) for i in range(3)]
+    lines = [L("Committee Policy Action", size=14), *body, L("continued text in a big font", block=5, size=14)]
+    paras = clean(lines).split("\n\n")
+    assert paras[0] == "## Committee Policy Action"
+    assert "## continued text in a big font" not in paras
+
+
 def test_normalize():
     assert normalize("0 to ¼  per­cent  ") == "0 to 1/4 percent"

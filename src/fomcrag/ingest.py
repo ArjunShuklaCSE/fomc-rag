@@ -11,7 +11,6 @@ import json
 import statistics
 import time
 from collections import Counter, defaultdict
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from .clean import CLEANER_VERSION, clean_document
@@ -80,7 +79,6 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--refresh-manifest", action="store_true")
     ap.add_argument("--limit", type=int, help="process only the first N docs per type (smoke test)")
-    ap.add_argument("--workers", type=int, default=6)
     args = ap.parse_args()
     t0 = time.perf_counter()
 
@@ -100,15 +98,16 @@ def main() -> None:
     print(f"downloaded; {len(failures)} download failures. extracting {len(todo)} docs...")
 
     docs, extra = [], {}
-    with ProcessPoolExecutor(args.workers) as ex:
-        for i, (rec, info) in enumerate(ex.map(process, todo, chunksize=2), 1):
-            if rec is None:
-                failures.append(info)
-            else:
-                docs.append(rec)
-                extra[rec["doc_id"]] = info
-            if i % 25 == 0:
-                print(f"  {i}/{len(todo)}")
+    # single process: the whole corpus extracts in about a minute, so a pool buys nothing
+    for i, m in enumerate(todo, 1):
+        rec, info = process(m)
+        if rec is None:
+            failures.append(info)
+        else:
+            docs.append(rec)
+            extra[rec["doc_id"]] = info
+        if i % 50 == 0:
+            print(f"  {i}/{len(todo)}", flush=True)
 
     stats = summarize(docs, extra, failures, time.perf_counter() - t0)
     write_jsonl(OUT / "docs.jsonl", docs)

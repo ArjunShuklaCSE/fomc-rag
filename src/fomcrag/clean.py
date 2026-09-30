@@ -15,7 +15,7 @@ import unicodedata
 from collections import Counter
 from dataclasses import dataclass
 
-CLEANER_VERSION = "1"  # bump on any change that alters output text: gold-set spans depend on it
+CLEANER_VERSION = "2"  # bump on any change that alters output text: gold-set spans depend on it
 
 
 @dataclass
@@ -43,6 +43,7 @@ WORD = re.compile(r"[a-z]+(?:-[a-z]+)*")
 BAND = 0.1        # top/bottom fraction of a page where running headers/footers live
 INDENT_PT = 12    # first-line indent that marks a new paragraph inside one layout block
 SIZE_JUMP = 1.5   # font-size change (pt) that separates body text from footnotes
+HEADING_PT = 1.5  # a short line this much larger than the body font is a heading
 REPEAT_FRAC = 0.3 # margin line on >=30% of pages is furniture (odd/even headers alternate, so not 50%)
 
 
@@ -114,7 +115,13 @@ def clean_document(lines: list[Line], n_pages: int) -> tuple[str, list[int], Cou
     block_x0 = {}
     for l in lines:
         block_x0[(l.page, l.block)] = min(l.x0, block_x0.get((l.page, l.block), l.x0))
-    is_heading = lambda l: l.bold and len(l.text) <= 120 and not SPEAKER.match(l.text)
+    sizes = Counter()
+    for l in lines:
+        sizes[round(l.size)] += len(l.text)
+    body = sizes.most_common(1)[0][0] if sizes else 0
+    # older templates mark headings bold; the 2025+ minutes use a larger regular weight instead
+    is_heading = lambda l: (len(l.text) <= 120 and not SPEAKER.match(l.text) and not l.text[0].islower()
+                            and (l.bold or (body and l.size >= body + HEADING_PT)))
 
     def breaks(prev: Line, prev_h: bool, cur: Line, cur_h: bool) -> bool:
         if SPEAKER.match(cur.text) or prev_h != cur_h:

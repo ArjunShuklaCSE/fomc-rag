@@ -12,7 +12,8 @@ import pymupdf
 from .clean import Line
 
 TOKEN = re.compile(r"[(\"'“‘]?([A-Za-z]+(['’\-][A-Za-z]+)*|[\d.,/%$\-]+)[)\"'”’.,;:?!]*")
-MIN_CHARS, MIN_WORDLIKE = 100, 0.6
+# an image page with a short but clean text layer is a cover page, not a broken scan: don't OCR it
+MIN_CHARS, MIN_WORDLIKE = 20, 0.6
 SUPERSCRIPT, BOLD = 1, 16
 _ocr = None
 
@@ -28,12 +29,23 @@ def needs_ocr(page: pymupdf.Page, text: str) -> bool:
     return len(text.strip()) < MIN_CHARS or wordlike_ratio(text) < MIN_WORDLIKE
 
 
+def is_scan(page: pymupdf.Page) -> bool:
+    area = page.rect.width * page.rect.height
+    return any(abs(pymupdf.Rect(i["bbox"])) > 0.5 * area for i in page.get_image_info())
+
+
 def text_lines(page: pymupdf.Page, pno: int) -> list[Line]:
     out = []
     h = page.rect.height
-    for bno, b in enumerate(page.get_text("dict")["blocks"]):
+    scan = is_scan(page)  # an OCR text layer's bold flags and font sizes are guesses: treat them as unknown
+    # without dropping TEXT_PRESERVE_IMAGES, "dict" embeds every scanned page's image bytes (slow, and OOMs workers)
+    flags = pymupdf.TEXTFLAGS_DICT & ~pymupdf.TEXT_PRESERVE_IMAGES
+    for bno, b in enumerate(page.get_text("dict", flags=flags)["blocks"]):
         for l in b.get("lines", []):
-            spans = [s for s in l["spans"] if not s["flags"] & SUPERSCRIPT]  # footnote markers: "Tetlow,21"
+            top = max(s["size"] for s in l["spans"])
+            # footnote markers ("Tetlow,21"): flagged superscript, or (2025+ template) just small digits
+            spans = [s for s in l["spans"] if not (s["flags"] & SUPERSCRIPT
+                                                   or (s["text"].strip().isdigit() and s["size"] < 0.75 * top))]
             text = "".join(s["text"] for s in spans)
             if not text.strip():
                 continue
@@ -41,7 +53,7 @@ def text_lines(page: pymupdf.Page, pno: int) -> list[Line]:
             bold = all(s["flags"] & BOLD or "bold" in s["font"].lower() for s in visible)
             x0, y0, _, y1 = l["bbox"]
             size = max(s["size"] for s in visible)
-            out.append(Line(text, pno, bno, x0, y0, y1, h, bold, size))
+            out.append(Line(text, pno, bno, x0, y0, y1, h, bold and not scan, 0.0 if scan else size))
     return out
 
 

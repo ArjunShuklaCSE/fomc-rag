@@ -32,10 +32,10 @@ The Federal Open Market Committee (FOMC) sets U.S. interest rates. It publishes 
 
 | Type | Years | Docs | Pages | What it looks like |
 |---|---|---:|---:|---|
-| Minutes | {{minutes_years}} | {{minutes_docs}} | {{minutes_pages}} | Two-column PDF, bold section headings, footnoted attendance lists |
-| Press conference transcripts | {{presconf_years}} | {{presconf_docs}} | {{presconf_pages}} | Chair's statement followed by reporter Q&A with speaker labels |
-| Meeting transcripts | 1980, 2016–2020 | {{transcript_docs}} | {{transcript_pages}} | Verbatim discussion. The 1980 set is scanned typewriter pages. |
-| **Total** | | **{{docs}}** | **{{pages}}** | {{chars_m}}M characters after cleaning |
+| Minutes | 2008–2026 | 149 | 2,568 | Narrow-column layout, section headings, footnoted attendance lists. The 2025 redesign changed the template. |
+| Press conference transcripts | 2011–2026 | 94 | 2,359 | Chair's statement followed by reporter Q&A with speaker labels |
+| Meeting transcripts | 1980 (10), 2016–2020 (40) | 50 | 7,663 | Verbatim discussion. The 1980 set is scanned typewriter pages. |
+| **Total** | | **293** | **12,590** | 30.7M characters after cleaning |
 
 Why this corpus and not a tidier one:
 
@@ -94,20 +94,22 @@ Every rule in the cleaner exists because of a failure seen in the real documents
 | Unicode fractions | `0 to ¼ percent` becomes `1⁄4` under NFKC | The fraction slash is mapped to `/`, matching how the 1980 documents write `5-1/2 percent`, so exact-number queries hit both eras. |
 | Scanned pages | Every page of the 1980 transcripts is an image | See OCR below. |
 
-**OCR is a fallback, and that decision was measured.** The 1980 scans already carry a text layer the Fed produced. On a sample transcript, 98% of its tokens (median) look like real words, and the worst page is at 91%. Running RapidOCR on that worst page took 8.9 seconds and produced *more* errors (`YeS`, `Ml` for `M1`, `IiI` for `III`). So OCR only runs on image pages where the text layer is missing or falls below 60% word-like tokens. In the full corpus that was {{ocr_pages}} pages.
+**OCR is a fallback, and that decision was measured.** The 1980 scans already carry a text layer the Fed produced. On a sample transcript, 98% of its tokens (median) look like real words, and the worst page is at 91%. Running RapidOCR on that worst page took 8.9 seconds and produced *more* errors (`YeS`, `Ml` for `M1`, `IiI` for `III`). So OCR only runs on image pages whose text layer is effectively empty (under 20 characters) or falls below 60% word-like tokens. On the current corpus that is **0 pages**. The fallback exists for scans without a usable layer, and the gate was tuned on a real false positive. The first version also triggered on any image page with under 100 characters, which caught the cover page of every 2025+ minutes release: a full-page banner image over a short, correct title. OCR replaced that good text with `0ctober 28-29, 2025`, so the threshold was lowered to "empty", not "short".
+
+**Two bugs worth knowing about.** (1) PyMuPDF's `get_text("dict")` embeds the raw bytes of every image block by default. On the image-only 1980 pages, that made extraction take 15.9 s per transcript and pushed workers out of memory. Excluding images from the text pass cut that transcript to 0.3 s, about 50x faster, and the whole corpus now extracts in under a minute in a single process, so the process pool was deleted, not tuned. (2) The 2025 minutes template marks headings with a larger regular-weight font instead of bold. A size rule caught those headings, but it also turned noise in the 1980 OCR layer into fake headings (`## 4/22/80`). The fix is to treat font metrics on scanned pages as unknown, and a test pins both behaviors.
 
 Full-corpus statistics from the last run (`data/processed/ingest_stats.json`):
 
 | Metric | Value |
 |---|---:|
-| Documents / pages | {{docs}} / {{pages}} |
-| Failures (download / extract) | {{failures}} |
-| Header and footer lines removed | {{furniture}} |
-| Line-break hyphens rejoined / kept | {{hy_join}} / {{hy_keep}} |
-| Speaker turns detected | {{speakers}} |
-| Headings detected | {{headings}} |
-| Pages sent to OCR | {{ocr_pages}} |
-| Wall time (download + extract, 6 processes) | {{wall}} |
+| Documents / pages | 293 / 12,590 |
+| Failures (download / extract) | 0 / 0 |
+| Header and footer lines removed | 30,920 |
+| Line-break hyphens rejoined / kept | 42,071 / 1,535 |
+| Speaker turns detected | 22,368 |
+| Headings detected | 2,530 |
+| Pages sent to OCR | 0 |
+| Extraction wall time (single process, laptop) | 56 s |
 
 ## Design decisions
 
@@ -121,9 +123,9 @@ These are the choices most likely to come up in review, with the reasoning behin
 
 **Each document is one string plus `page_starts`, not a list of pages.** Chunkers need continuous text, since sentences cross pages and columns. Citations need page numbers. One `bisect` over `page_starts` maps any character offset back to its page, which serves both.
 
-**The manifest is committed and the PDFs are not.** `data/manifest.jsonl` pins exactly which 293 source URLs make up the corpus, so results stay reproducible even if the Fed reorganizes its site. The PDFs (about 1 GB) are rebuilt from it with one command.
+**The manifest is committed and the PDFs are not.** `data/manifest.jsonl` pins exactly which 293 source URLs make up the corpus, so results stay reproducible even if the Fed reorganizes its site. The PDFs (175 MB) are rebuilt from it with one command.
 
-**One database, not two (planned).** Postgres with pgvector for dense search and its built-in full-text search for BM25. At about 50k chunks, a dedicated vector database adds an extra service and nothing measurable, and hybrid retrieval becomes a single SQL query.
+**One database, not two (planned).** Postgres with pgvector for dense search and its built-in full-text search for BM25. At 30.7M characters (roughly 15k chunks of 500 tokens), a dedicated vector database adds an extra service and nothing measurable, and hybrid retrieval becomes a single SQL query.
 
 **Dev/test split before any tuning (planned).** The gold set is split once, with a fixed seed and stratified by question type. Every experiment is tuned on dev. Test is scored once per final configuration, and each result is reported with a bootstrap 95% confidence interval, so a 2-point gain that falls within the noise gets reported as noise.
 
@@ -161,7 +163,7 @@ git clone https://github.com/ArjunShuklaCSE/fomc-rag && cd fomc-rag
 uv sync
 
 uv run python -m fomcrag.ingest --limit 3   # smoke run: 3 docs per type, about 2 minutes
-uv run python -m fomcrag.ingest             # full corpus (downloads about 1 GB)
+uv run python -m fomcrag.ingest             # full corpus: 175 MB of PDFs, about 1 minute to extract after download
 uv run pytest -q
 ```
 
