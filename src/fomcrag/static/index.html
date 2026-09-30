@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask the FOMC</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --ink: #1b1d21; --muted: #5f6570; --line: #e3e3de;
+    --accent: #1f5f8b; --accent-soft: #e6eff6; --warn: #8a5a00; --warn-soft: #fbf1dc; --mark: #fff3b0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121417; --panel: #1a1d21; --ink: #e8e9eb; --muted: #9aa0a8; --line: #2c3036;
+            --accent: #7fb6de; --accent-soft: #1d2a35; --warn: #e3b35c; --warn-soft: #2e2618; --mark: #4a4220; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 26px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); margin: 0 0 24px; font-size: 15px; }
+  form { display: flex; gap: 8px; flex-wrap: wrap; }
+  input[type=text] { flex: 1 1 420px; min-width: 0; padding: 12px 14px; font: inherit; color: var(--ink);
+    background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+  input[type=text]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  button { padding: 12px 18px; font: inherit; font-weight: 600; border: 0; border-radius: 8px;
+    background: var(--accent); color: var(--panel); cursor: pointer; }
+  button.secondary { background: var(--accent-soft); color: var(--accent); }
+  button:disabled { opacity: .6; cursor: wait; }
+  .examples { margin: 12px 0 0; display: flex; gap: 8px; flex-wrap: wrap; }
+  .examples button { padding: 6px 10px; font-size: 13px; font-weight: 500; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; margin-top: 20px; }
+  .answer { font-size: 17px; }
+  .cite { display: inline-block; min-width: 1.6em; padding: 0 5px; margin: 0 1px; border-radius: 5px; font-size: 12px;
+    font-weight: 700; text-align: center; text-decoration: none; background: var(--accent-soft); color: var(--accent); vertical-align: 2px; }
+  .idk { background: var(--warn-soft); color: var(--warn); padding: 10px 12px; border-radius: 8px; }
+  .meta { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  .src { border-top: 1px solid var(--line); padding: 14px 0; }
+  .src:first-of-type { border-top: 0; }
+  .src.hl { background: var(--mark); margin: 0 -20px; padding: 14px 20px; }
+  .src-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  .src-n { font-weight: 700; color: var(--accent); }
+  .src-title { font-weight: 600; }
+  .src-title a { color: inherit; }
+  .score { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; display: flex; gap: 6px; align-items: center; }
+  .bar { width: 64px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--accent); }
+  .src-text { color: var(--ink); font-size: 14px; margin-top: 6px; white-space: pre-wrap; max-height: 7.5em; overflow: hidden; }
+  .src-text.open { max-height: none; }
+  .more { background: none; color: var(--accent); padding: 4px 0; font-size: 13px; font-weight: 600; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 6px; }
+  .err { color: var(--warn); }
+  footer { color: var(--muted); font-size: 13px; margin-top: 32px; }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Ask the FOMC</h1>
+  <p class="sub">Answers from Federal Reserve minutes, press conferences and meeting transcripts (1980, 2008–2026), cited to the exact PDF page.</p>
+  <form id="f">
+    <input type="text" id="q" maxlength="500" placeholder="What did the FOMC decide in March 2020?" aria-label="Question" required>
+    <button id="ask" type="submit">Ask</button>
+    <button id="search" type="button" class="secondary">Search only</button>
+  </form>
+  <div class="examples" id="examples"></div>
+  <div id="out"></div>
+  <footer id="foot"></footer>
+</main>
+<script>
+const EXAMPLES = [
+  "To what level did the FOMC raise the target range in March 2023?",
+  "Which reporter asked about conflict-of-interest rules in November 2021?",
+  "In April 1980, why did a participant think the recession was riskier?",
+];
+const $ = (id) => document.getElementById(id);
+const el = (tag, props = {}, kids = []) => {
+  const n = Object.assign(document.createElement(tag), props);
+  kids.forEach((k) => n.append(k));
+  return n;
+};
+
+for (const ex of EXAMPLES) {
+  $("examples").append(el("button", { type: "button", className: "secondary", textContent: ex, onclick: () => { $("q").value = ex; run(true); } }));
+}
+
+fetch("/health").then((r) => r.json()).then((h) => {
+  $("foot").textContent = `${h.chunks.toLocaleString()} chunks · ${h.llm ? "answers by " + h.llm : "retrieval-only deployment"} · `;
+  $("foot").append(el("a", { href: "https://github.com/ArjunShuklaCSE/fomc-rag", textContent: "source & evaluation" }));
+  if (!h.llm) $("ask").disabled = true;
+}).catch(() => {});
+
+// Render answer text safely: plain text nodes, with [n] turned into links to the matching source card.
+function renderAnswer(text) {
+  const p = el("div", { className: "answer" });
+  for (const part of text.split(/(\[\d+\])/)) {
+    const m = part.match(/^\[(\d+)\]$/);
+    if (m) {
+      const a = el("a", { className: "cite", href: `#src-${m[1]}`, textContent: m[1] });
+      a.onclick = () => { document.querySelectorAll(".src").forEach((s) => s.classList.remove("hl")); $(`src-${m[1]}`)?.classList.add("hl"); };
+      p.append(a);
+    } else p.append(document.createTextNode(part));
+  }
+  return p;
+}
+
+function renderSources(sources, cited = []) {
+  const box = el("div", { className: "panel" }, [el("h2", { textContent: "Retrieved passages" })]);
+  for (const s of sources) {
+    const pages = s.pages[0] === s.pages[1] ? `p. ${s.pages[0]}` : `pp. ${s.pages[0]}–${s.pages[1]}`;
+    const text = el("div", { className: "src-text", textContent: s.text });
+    const more = el("button", { type: "button", className: "more", textContent: "Show full passage" });
+    more.onclick = () => { text.classList.toggle("open"); more.textContent = text.classList.contains("open") ? "Collapse" : "Show full passage"; };
+    const pct = Math.max(0, Math.min(1, s.score));
+    box.append(el("div", { className: "src" + (cited.includes(s.n) ? " cited" : ""), id: `src-${s.n}` }, [
+      el("div", { className: "src-head" }, [
+        el("span", { className: "src-n", textContent: `[${s.n}]` }),
+        el("span", { className: "src-title" }, [el("a", { href: s.url, target: "_blank", rel: "noopener", textContent: `${s.title}, ${pages}` })]),
+        el("span", { className: "score" }, [el("span", { className: "bar" }, [el("i", { style: `width:${(pct * 100).toFixed(0)}%` })]), document.createTextNode(s.score.toFixed(3))]),
+      ]),
+      text, more,
+    ]));
+  }
+  return box;
+}
+
+async function run(withAnswer) {
+  const q = $("q").value.trim();
+  if (q.length < 3) return;
+  const out = $("out");
+  out.replaceChildren(el("div", { className: "panel meta", textContent: withAnswer ? "Retrieving and answering…" : "Searching…" }));
+  $("ask").disabled = $("search").disabled = true;
+  try {
+    const r = withAnswer
+      ? await fetch("/answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: q }) })
+      : await fetch(`/search?q=${encodeURIComponent(q)}&k=10`);
+    if (!r.ok) throw new Error((await r.json()).detail || r.statusText);
+    const d = await r.json();
+    out.replaceChildren();
+    if (withAnswer) {
+      const idk = !!d.abstained;
+      const panel = el("div", { className: "panel" }, [el("h2", { textContent: "Answer" }),
+        idk ? el("div", { className: "idk", textContent: d.abstained === "retrieval"
+          ? "I don't know: no passage scored high enough to answer from." : "I don't know: the retrieved passages don't contain the answer." })
+            : renderAnswer(d.answer),
+        el("div", { className: "meta", textContent: `${(d.ms / 1000).toFixed(1)} s · top relevance ${d.top_score.toFixed(3)}${d.llm ? " · " + d.llm : ""}` })]);
+      out.append(panel, renderSources(d.sources, d.citations));
+    } else {
+      out.append(renderSources(d.results));
+    }
+  } catch (e) {
+    out.replaceChildren(el("div", { className: "panel err", textContent: `Error: ${e.message}` }));
+  } finally {
+    $("search").disabled = false;
+    fetch("/health").then((r) => r.json()).then((h) => { $("ask").disabled = !h.llm; });
+  }
+}
+$("f").onsubmit = (e) => { e.preventDefault(); run(true); };
+$("search").onclick = () => run(false);
+</script>
+</body>
+</html>

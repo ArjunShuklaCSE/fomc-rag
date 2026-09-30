@@ -1,0 +1,7 @@
+{
+ "threshold": 0.5088852047920227,
+ "dev_accuracy": 0.9078947368421053,
+ "false_abstain_on_answerable": 0.0,
+ "n_unanswerable": 10,
+ "n_answerable": 66
+}

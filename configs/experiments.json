@@ -1,0 +1,239 @@
+{
+  "base": {
+    "chunker": {
+      "kind": "fixed",
+      "size": 500,
+      "overlap": 0
+    },
+    "header": false,
+    "method": "dense",
+    "w_dense": 0.5,
+    "rrf_k": 60,
+    "rerank": 0,
+    "filters": [],
+    "rewrite": false
+  },
+  "experiments": [
+    {
+      "name": "E0",
+      "note": "baseline: 500-token fixed chunks, dense only",
+      "set": {}
+    },
+    {
+      "name": "E1",
+      "note": "fixed 500 + 20% overlap",
+      "set": {
+        "chunker": {
+          "kind": "fixed",
+          "size": 500,
+          "overlap": 100
+        }
+      }
+    },
+    {
+      "name": "E2",
+      "note": "fixed 250",
+      "set": {
+        "chunker": {
+          "kind": "fixed",
+          "size": 250,
+          "overlap": 0
+        }
+      }
+    },
+    {
+      "name": "E3",
+      "note": "fixed 250 + 20% overlap",
+      "set": {
+        "chunker": {
+          "kind": "fixed",
+          "size": 250,
+          "overlap": 50
+        }
+      }
+    },
+    {
+      "name": "E4",
+      "note": "fixed 128",
+      "set": {
+        "chunker": {
+          "kind": "fixed",
+          "size": 128,
+          "overlap": 0
+        }
+      }
+    },
+    {
+      "name": "E5",
+      "note": "structure-aware 250 (paragraphs / speaker turns, break at headings)",
+      "set": {
+        "chunker": {
+          "kind": "structure",
+          "size": 250
+        }
+      }
+    },
+    {
+      "name": "E6",
+      "note": "structure-aware 500",
+      "set": {
+        "chunker": {
+          "kind": "structure",
+          "size": 500
+        }
+      }
+    },
+    {
+      "name": "E7",
+      "note": "semantic 250 (break at bottom-10% adjacent-sentence similarity)",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        }
+      }
+    },
+    {
+      "name": "E8",
+      "note": "BM25 only (semantic-250)",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        },
+        "method": "bm25"
+      }
+    },
+    {
+      "name": "E9",
+      "note": "hybrid RRF, w_dense=0.5",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        },
+        "method": "hybrid",
+        "w_dense": 0.5
+      }
+    },
+    {
+      "name": "E10",
+      "note": "hybrid RRF, w_dense=0.3",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        },
+        "method": "hybrid",
+        "w_dense": 0.3
+      }
+    },
+    {
+      "name": "E11",
+      "note": "hybrid RRF, w_dense=0.7",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        },
+        "method": "hybrid",
+        "w_dense": 0.7
+      }
+    },
+    {
+      "name": "E12",
+      "note": "hybrid RRF, w_dense=0.1",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        },
+        "method": "hybrid",
+        "w_dense": 0.1
+      }
+    },
+    {
+      "name": "E13",
+      "note": "+ cross-encoder rerank of the fused top 50",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        },
+        "method": "hybrid",
+        "w_dense": 0.3,
+        "rerank": 50
+      }
+    },
+    {
+      "name": "E14",
+      "note": "+ date filter parsed from the question",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        },
+        "method": "hybrid",
+        "w_dense": 0.3,
+        "rerank": 50,
+        "filters": [
+          "date"
+        ]
+      }
+    },
+    {
+      "name": "E15",
+      "note": "+ date and doc-type filters",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        },
+        "method": "hybrid",
+        "w_dense": 0.3,
+        "rerank": 50,
+        "filters": [
+          "date",
+          "type"
+        ]
+      }
+    },
+    {
+      "name": "E16",
+      "note": "+ contextual chunk header (title | section) at index time",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        },
+        "method": "hybrid",
+        "w_dense": 0.3,
+        "rerank": 50,
+        "filters": [
+          "date"
+        ],
+        "header": true
+      }
+    },
+    {
+      "name": "E17",
+      "note": "E15 + contextual chunk header (title | section)",
+      "set": {
+        "chunker": {
+          "kind": "semantic",
+          "size": 250
+        },
+        "method": "hybrid",
+        "w_dense": 0.3,
+        "rerank": 50,
+        "filters": [
+          "date",
+          "type"
+        ],
+        "header": true
+      }
+    }
+  ],
+  "selection": "Each step keeps the previous best on dev (primary metric Recall@10, ties -> MRR). Test is scored only for the final chain.",
+  "serving": "E17"
+}

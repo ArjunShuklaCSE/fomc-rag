@@ -1,0 +1,8 @@
+split,name,config,recall@5,recall@10,mrr,ndcg@10,recall@10_ci_lo,recall@10_ci_hi,tokens@5,p50_ms,p95_ms,n_chunks,index,commit
+test,E0,fixed-500 dense,0.1231,0.1385,0.0622,0.0806,0.0615,0.2308,2490,10,11,12441,c4ca087720,97cf401
+test,E7,semantic-250 dense,0.1692,0.2231,0.1049,0.1324,0.1231,0.3308,916,12,20,45590,2d2a775f72,97cf401
+test,E8,semantic-250 bm25,0.2923,0.3846,0.2269,0.262,0.2692,0.5,880,0,1,45590,2d2a775f72,97cf401
+test,E10,semantic-250 hybrid w_dense=0.3,0.2769,0.3692,0.2263,0.2556,0.2615,0.4769,912,13,15,45590,2d2a775f72,97cf401
+test,E13,semantic-250 hybrid w_dense=0.3 +rerank@50,0.4615,0.5231,0.364,0.3886,0.4154,0.6385,962,157,174,45590,2d2a775f72,97cf401
+test,E15,semantic-250 hybrid w_dense=0.3 +rerank@50 +filter:date/type,0.7615,0.8692,0.6926,0.7192,0.7923,0.9385,932,161,174,45590,2d2a775f72,97cf401
+test,E17,semantic-250 hybrid w_dense=0.3 +header +rerank@50 +filter:date/type,0.7923,0.8538,0.6962,0.7204,0.7692,0.9308,930,146,166,45590,11b5107248,97cf401

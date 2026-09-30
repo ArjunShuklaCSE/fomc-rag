@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # With a key, /answer uses Claude. Without one the CPU container serves retrieval only
+      # (the local 4-bit generator needs a CUDA GPU).
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    volumes:
+      - ./data:/app/data          # corpus + cached indexes survive rebuilds
+      - ./models:/app/models      # optional pre-fetched models (python -m fomcrag.models)
+      - hf-cache:/root/.cache/huggingface
+    restart: unless-stopped
+
+volumes:
+  hf-cache:
