@@ -15,7 +15,7 @@ import unicodedata
 from collections import Counter
 from dataclasses import dataclass
 
-CLEANER_VERSION = "2"  # bump on any change that alters output text: gold-set spans depend on it
+CLEANER_VERSION = "4"  # bump on any change that alters output text: gold-set spans depend on it
 
 
 @dataclass
@@ -44,11 +44,19 @@ BAND = 0.1        # top/bottom fraction of a page where running headers/footers 
 INDENT_PT = 12    # first-line indent that marks a new paragraph inside one layout block
 SIZE_JUMP = 1.5   # font-size change (pt) that separates body text from footnotes
 HEADING_PT = 1.5  # a short line this much larger than the body font is a heading
-REPEAT_FRAC = 0.3 # margin line on >=30% of pages is furniture (odd/even headers alternate, so not 50%)
+# a margin line repeated on >=10% of pages is furniture: odd/even headers alternate, and the minutes switch
+# headers mid-document (SEP section), so "Minutes of the Meeting of ..." can cover only 5 of 28 pages
+REPEAT_FRAC = 0.1
+
+
+FRACTIONS = {"¼": "1/4", "½": "1/2", "¾": "3/4"}
+NUMERIC = re.compile(r"[\d.,%/\-–]+")
+CHART_MIN_TOKENS, CHART_NUMERIC = 8, 0.5  # axis labels of projection charts: "0.7- 0.8 0.9- 1.0 ..."
 
 
 def normalize(s: str) -> str:
-    # NFKC turns "¼" into "1⁄4" (fraction slash); map it to "/" so it matches the 1980s "1/4" style
+    # "4¾" must become "4-3/4" (the 1980s style), not NFKC's "43⁄4"; a bare "¼" becomes "1/4"
+    s = re.sub(r"(\d?)([¼½¾])", lambda m: (m[1] + "-" if m[1] else "") + FRACTIONS[m[2]], s)
     s = unicodedata.normalize("NFKC", s).replace("­", "").replace("⁄", "/")
     return re.sub(r"\s+", " ", s).strip()
 
@@ -68,11 +76,21 @@ def _key(text: str) -> str:
 
 def strip_furniture(lines: list[Line], n_pages: int) -> list[Line]:
     """Drop rules, margin page numbers, and margin lines that repeat (digits masked) across pages."""
-    repeats = Counter(k for k, _ in {(_key(l.text), l.page) for l in lines if _in_band(l)})
+    repeats = Counter(k for k, _ in {(_key(l.text), l.page) for l in lines if _in_band(l) and not SPEAKER.match(l.text)})
     threshold = max(3, REPEAT_FRAC * n_pages)
     return [l for l in lines if not (
         RULE.match(l.text)
         or (_in_band(l) and (PAGE_NO.match(l.text) or repeats[_key(l.text)] >= threshold)))]
+
+
+def vocab_of(texts) -> Counter:
+    """Word counts that decide line-break hyphens. Ingest passes corpus-wide counts."""
+    return Counter(WORD.findall(" ".join(texts).lower()))
+
+
+def _is_chart(text: str) -> bool:
+    toks = text.split()
+    return len(toks) >= CHART_MIN_TOKENS and sum(bool(NUMERIC.fullmatch(t)) for t in toks) / len(toks) >= CHART_NUMERIC
 
 
 def _join(texts: list[str], vocab: Counter, stats: Counter) -> tuple[str, list[int]]:
@@ -87,7 +105,7 @@ def _join(texts: list[str], vocab: Counter, stats: Counter) -> tuple[str, list[i
         m = re.search(r"([A-Za-z]+)-$", s)
         if m and not s.endswith("--") and t[:1].islower():
             a, b = m.group(1).lower(), re.match(r"[a-z]+", t).group(0)
-            # "longer-\nrun" stays hyphenated if this document writes "longer-run" elsewhere; "Sys-\ntem" -> "System"
+            # "longer-\nrun" stays hyphenated if the corpus writes "longer-run" more than "longerrun"; "Sys-\ntem" -> "System"
             if vocab[f"{a}-{b}"] > vocab[a + b]:
                 stats["hyphen_kept"] += 1
             else:
@@ -102,7 +120,7 @@ def _join(texts: list[str], vocab: Counter, stats: Counter) -> tuple[str, list[i
     return s, offsets
 
 
-def clean_document(lines: list[Line], n_pages: int) -> tuple[str, list[int], Counter]:
+def clean_document(lines: list[Line], n_pages: int, vocab: Counter | None = None) -> tuple[str, list[int], Counter]:
     stats = Counter()
     for l in lines:
         l.text = normalize(l.text)
@@ -111,7 +129,7 @@ def clean_document(lines: list[Line], n_pages: int) -> tuple[str, list[int], Cou
     lines = strip_furniture(lines, n_pages)
     stats["furniture_removed"] = before - len(lines)
 
-    vocab = Counter(WORD.findall(" ".join(l.text for l in lines).lower()))
+    vocab = vocab if vocab is not None else vocab_of(l.text for l in lines)
     block_x0 = {}
     for l in lines:
         block_x0[(l.page, l.block)] = min(l.x0, block_x0.get((l.page, l.block), l.x0))
@@ -120,8 +138,8 @@ def clean_document(lines: list[Line], n_pages: int) -> tuple[str, list[int], Cou
         sizes[round(l.size)] += len(l.text)
     body = sizes.most_common(1)[0][0] if sizes else 0
     # older templates mark headings bold; the 2025+ minutes use a larger regular weight instead
-    is_heading = lambda l: (len(l.text) <= 120 and not SPEAKER.match(l.text) and not l.text[0].islower()
-                            and (l.bold or (body and l.size >= body + HEADING_PT)))
+    styled = lambda l: (len(l.text) <= 120 and not SPEAKER.match(l.text)
+                        and (l.bold or (body and l.size >= body + HEADING_PT)))
 
     def breaks(prev: Line, prev_h: bool, cur: Line, cur_h: bool) -> bool:
         if SPEAKER.match(cur.text) or prev_h != cur_h:
@@ -138,7 +156,10 @@ def clean_document(lines: list[Line], n_pages: int) -> tuple[str, list[int], Cou
 
     paragraphs: list[tuple[bool, list[Line]]] = []
     for l in lines:
-        h = is_heading(l)
+        prev_h, prev = (paragraphs[-1][0], paragraphs[-1][1][-1]) if paragraphs else (False, None)
+        # a lowercase start is mid-sentence, unless it wraps a heading ("Current Condi-" / "tions and the Outlook")
+        wraps = prev_h and (prev.page, prev.block) == (l.page, l.block)
+        h = styled(l) and (not l.text[0].islower() or wraps)
         if not paragraphs or breaks(paragraphs[-1][1][-1], paragraphs[-1][0], l, h):
             paragraphs.append((h, [l]))
         else:
@@ -147,10 +168,13 @@ def clean_document(lines: list[Line], n_pages: int) -> tuple[str, list[int], Cou
     out, pos = [], 0
     page_starts: list[int | None] = [None] * n_pages
     for h, para in paragraphs:
+        text, offsets = _join([l.text for l in para], vocab, stats)
+        if not h and _is_chart(text):  # chart axis labels carry no retrievable meaning
+            stats["chart_paragraphs_dropped"] += 1
+            continue
         if out:
             out.append("\n\n")
             pos += 2
-        text, offsets = _join([l.text for l in para], vocab, stats)
         prefix = "## " if h else ""
         for l, off in zip(para, offsets):
             if page_starts[l.page - 1] is None:

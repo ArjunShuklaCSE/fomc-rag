@@ -59,3 +59,15 @@ def test_larger_font_is_a_heading_unless_mid_sentence():
 
 def test_normalize():
     assert normalize("0 to ¼  per­cent  ") == "0 to 1/4 percent"
+    assert normalize("to 4¾ to 5 percent") == "to 4-3/4 to 5 percent"  # not "43/4"
+
+
+def test_wrapped_heading_stays_one_heading():
+    lines = [L("Participants’ Views on Current Condi-", bold=True), L("tions and the Economic Outlook", bold=True),
+             L("In their discussion, participants noted", block=1)]
+    assert clean(lines).split("\n\n")[0] == "## Participants’ Views on Current Conditions and the Economic Outlook"
+
+
+def test_chart_axis_labels_dropped():
+    lines = [L("Real prose stays."), L("0.7- 0.8 0.9- 1.0 1.1- 1.2 1.3- 1.4 Percent range 2 4 6 8", block=1)]
+    assert clean(lines) == "Real prose stays."

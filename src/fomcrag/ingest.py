@@ -13,7 +13,7 @@ import time
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from .clean import CLEANER_VERSION, clean_document
+from .clean import CLEANER_VERSION, clean_document, normalize, vocab_of
 from .extract import extract_pdf
 from .sources import build_manifest, download, load_manifest
 
@@ -33,12 +33,24 @@ def write_jsonl(path: Path, rows) -> None:
     tmp.replace(path)
 
 
-def process(m: dict):
+def corpus_vocab(todo: list[dict]) -> Counter:
+    """Pass 1: word counts over the whole corpus, so hyphen repair sees more than one document."""
+    vocab = Counter()
+    for m in todo:
+        try:
+            lines, _, _ = extract_pdf(RAW / f"{m['doc_id']}.pdf")
+        except Exception:
+            continue  # reported by pass 2
+        vocab.update(vocab_of(normalize(l.text) for l in lines))
+    return vocab
+
+
+def process(m: dict, vocab: Counter | None = None):
     path = RAW / f"{m['doc_id']}.pdf"
     t0 = time.perf_counter()
     try:
         lines, n_pages, ocr_pages = extract_pdf(path)
-        text, page_starts, stats = clean_document(lines, n_pages)
+        text, page_starts, stats = clean_document(lines, n_pages, vocab)
         if len(text) < MIN_DOC_CHARS:
             raise ValueError(f"only {len(text)} chars extracted")
     except Exception as e:
@@ -99,8 +111,10 @@ def main() -> None:
 
     docs, extra = [], {}
     # single process: the whole corpus extracts in about a minute, so a pool buys nothing
+    vocab = corpus_vocab(todo)
+    print(f"corpus vocabulary: {len(vocab)} word forms", flush=True)
     for i, m in enumerate(todo, 1):
-        rec, info = process(m)
+        rec, info = process(m, vocab)
         if rec is None:
             failures.append(info)
         else:
