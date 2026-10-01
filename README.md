@@ -95,7 +95,7 @@ flowchart LR
         L --> O[answer with citations<br/>linked to PDF pages]
     end
     subgraph evaluate["Evaluation"]
-        GS[(gold set<br/>151 questions,<br/>char-span labels)] -.-> M[Recall@k · MRR · nDCG<br/>bootstrap CIs]
+        GS[(gold set<br/>151 questions,<br/>char-span labels)] -.-> M["Recall@k · MRR · nDCG<br/>bootstrap CIs"]
     end
 ```
 
